@@ -79,17 +79,61 @@ with tabs[0]:
         st.session_state._thumb_hint = optional_hint
 
 with tabs[1]:
-    st.subheader("Generate thumbnail brief (structured)")
+    st.subheader("Generate thumbnail brief (structured + editable)")
+
     if st.button("Build Thumbnail Brief"):
         if not st.session_state.get("_thumb_img"):
             st.error("Upload a thumbnail in Inputs first.")
         else:
-            brief = build_thumbnail_brief(st.session_state._thumb_img, st.session_state._thumb_hint)
+            brief = build_thumbnail_brief(st.session_state._thumb_img, st.session_state.get("_thumb_hint", ""))
             st.session_state.thumbnail_brief = brief
             save_json(st.session_state.run_id, "thumbnail_brief.json", brief)
-            st.success("Thumbnail brief created.")
-    if st.session_state.thumbnail_brief:
+            st.success("Thumbnail brief created (saved).")
+
+    brief = st.session_state.thumbnail_brief
+    if brief:
+        st.markdown("### Edit brief (small edits only)")
+        col1, col2 = st.columns(2)
+
+        with col1:
+            scene_type = st.text_input("Scene type", value=brief.get("scene_type", "unknown"))
+            hook_angle = st.text_area("Hook angle (1 line)", value=brief.get("hook_angle", ""), height=80)
+            text_on_thumb = st.text_input("Text on thumbnail (optional)", value=brief.get("text_on_thumbnail") or "")
+
+        with col2:
+            visible_elements = st.text_area(
+                "Visible elements (comma-separated)",
+                value=", ".join(brief.get("visible_elements", [])),
+                height=80
+            )
+            vibe = st.text_area(
+                "Vibe tags (comma-separated)",
+                value=", ".join(brief.get("vibe", [])),
+                height=80
+            )
+            notes = st.text_area(
+                "Composition notes (comma-separated)",
+                value=", ".join(brief.get("composition_notes", [])),
+                height=80
+            )
+
+        if st.button("Save edits"):
+            edited = dict(brief)
+            edited["scene_type"] = scene_type.strip() or "unknown"
+            edited["hook_angle"] = hook_angle.strip()
+            edited["text_on_thumbnail"] = text_on_thumb.strip() if text_on_thumb.strip() else None
+
+            edited["visible_elements"] = [x.strip() for x in visible_elements.split(",") if x.strip()]
+            edited["vibe"] = [x.strip() for x in vibe.split(",") if x.strip()]
+            edited["composition_notes"] = [x.strip() for x in notes.split(",") if x.strip()]
+
+            st.session_state.thumbnail_brief = edited
+            save_json(st.session_state.run_id, "thumbnail_brief.json", edited)
+            st.success("Edits saved.")
+
+        st.markdown("### Current brief JSON")
         st.json(st.session_state.thumbnail_brief)
+
 
 with tabs[2]:
     st.subheader("Gemini research: find 3–5 real cases matching thumbnail vibe")
