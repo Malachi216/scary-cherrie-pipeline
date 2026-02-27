@@ -20,3 +20,4 @@ def save_json(run_id: str, filename: str, data):
 
 def word_count(text: str) -> int:
     return len([w for w in text.split() if w.strip()])
+    

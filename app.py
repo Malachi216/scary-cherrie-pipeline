@@ -11,7 +11,7 @@ from core.split_acts import split_into_acts
 from core.validate_rubric import score_act_bundle
 from core.patch_rewrite import patch_rewrite_weak_blocks
 from core.export_docx import export_script_docx
-from core.utils import word_count, ensure_run_dir, save_json
+from core.utils import word_count, ensure_run_dir, save_json, get_or_create_run_id
 
 load_dotenv()
 
@@ -87,8 +87,11 @@ with tabs[1]:
         else:
             brief = build_thumbnail_brief(st.session_state._thumb_img, st.session_state.get("_thumb_hint", ""))
             st.session_state.thumbnail_brief = brief
+
+            st.session_state.run_id = get_or_create_run_id(st.session_state.run_id)
             save_json(st.session_state.run_id, "thumbnail_brief.json", brief)
-            st.success("Thumbnail brief created (saved).")
+
+            st.success(f"Thumbnail brief created (saved) to runs/{st.session_state.run_id}/thumbnail_brief.json")
 
     brief = st.session_state.thumbnail_brief
     if brief:
