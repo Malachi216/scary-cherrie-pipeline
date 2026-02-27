@@ -53,7 +53,7 @@ Each stage can be executed independently and reused for different tasks.
 
 ## 📁 Project Structure
 
-
+```
 content-automation-pipeline/
 ├── src/
 │ ├── pipeline/ # Generation stages
@@ -65,7 +65,7 @@ content-automation-pipeline/
 ├── requirements.txt # Python dependencies
 ├── README.md # Project documentation
 └── .env.example # Environment configuration
-
+```
 
 ---
 
