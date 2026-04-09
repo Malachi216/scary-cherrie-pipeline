@@ -1,6 +1,6 @@
 # Content Automation Pipeline
 
-A AI-powered content generation and automation framework designed to take minimal input (e.g., a simple thumbnail or topic) and generate structured, high-quality content outputs such as fully developed YouTube scripts, articles, summaries, and more.
+An modular AI-powered content generation and automation framework designed to take minimal input (e.g., a simple thumbnail or topic) and generate structured, high-quality content outputs such as fully developed YouTube scripts, articles, summaries, and more.
 
 This project focuses on an end-to-end automation workflow — from brief idea input to polished content output — using modern LLMs, retrieval systems, and flexible pipeline components.
 
